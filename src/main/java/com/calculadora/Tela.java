@@ -4,10 +4,10 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Tela extends JPanel {
+ class Tela extends JPanel {
     private JTextField tela;
 
-    public Tela() {
+     Tela() {
         initComponents();
     }
     
@@ -19,7 +19,7 @@ public class Tela extends JPanel {
         this.add(tela);
     }
 
-    public void setValue(String value) {
+     void setValue(String value) {
         this.tela.setText(value);
     } 
 }

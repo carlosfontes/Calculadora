@@ -5,11 +5,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Teclado extends JPanel{
+class Teclado extends JPanel{
     
     private final ActionListener actionListener;
     
-    public Teclado(ActionListener actionListener){
+    Teclado(ActionListener actionListener){
         this.actionListener = actionListener;
         initComponents();
     }
