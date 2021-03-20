@@ -1,36 +1,55 @@
 package com.calculadora;
 
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Teclado extends JPanel{
-    
-    private final ActionListener actionListener;
-    
-    public Teclado(ActionListener actionListener){
-        this.actionListener = actionListener;
+import static com.calculadora.Key.*;
+
+class Teclado extends JPanel {
+
+    private final Calculadora calculadora;
+
+    Teclado(Calculadora calculadora) {
+        this.calculadora = calculadora;
         initComponents();
     }
-    
-    private final String[][] mapaTeclas = {
-        {"M+","M-","%","C"},
-        {"7","8","9","/"},
-        {"4","5","6","x"},
-        {"1","2","3","-"},
-        {"0",".","=","+"}
+
+    private void initComponents() {
+        this.setLayout(new GridLayout(keyMap.length, keyMap.length));
+
+        Arrays.stream(keyMap)
+                .flatMap(Arrays::stream)
+                .map(KeyButton::new)
+                .forEach(this::add);
+    }
+
+    private final Key[][] keyMap = {
+            {MPLUS, MMINUS, PERCENT, CLEAR    },
+            {SEVEN, EIGHT,  NINE,    DIVIDE   },
+            {FOUR,  FIVE,   SIX,     MULTIPLY },
+            {ONE,   TWO,    THREE,   MINUS    },
+            {ZERO,  DOT,    EQUAL,   PLUS     }
     };
-    
-    private void initComponents(){
-        this.setLayout(new GridLayout(mapaTeclas.length,mapaTeclas.length));
-        
-        for(String[] line : mapaTeclas){
-            for(String caption: line){
-                JButton btn = new JButton(caption);
-                btn.addActionListener(actionListener);
-                this.add(btn);
-            }
+
+    private class KeyButton extends JButton implements Command {
+
+        private BiConsumer<Calculadora, String> consumer;
+
+        KeyButton(Key key) {
+            super(key.toString());
+            this.addActionListener(calculadora);
+            this.consumer = key.getAction();
+            setFont(new Font("Consolas", Font.BOLD, 30));
+            setFocusable(false);
         }
-    }   
+
+        @Override
+        public void execute() {
+            consumer.accept(calculadora, getText());
+        }
+    }
 }
